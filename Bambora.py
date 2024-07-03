@@ -5,11 +5,11 @@ import tkinter as tk
 from tkinter import filedialog
 
 # Function to select input files
-def select_input_folder():
+def select_input_files():
     root = tk.Tk()
     root.withdraw()
-    folder_path = filedialog.askdirectory(title="Select Input Folder")
-    return folder_path
+    file_paths = filedialog.askopenfilenames(title="Select Input Files", filetypes=[("Excel files", "*.xlsx")])
+    return file_paths
 
 # Function to select output file
 def select_output_file():
@@ -19,19 +19,17 @@ def select_output_file():
     return file_path
 
 # Main code execution
-input_folder = select_input_folder()
-if input_folder:
+input_files = select_input_files()
+if input_files:
     output_file = select_output_file()
     
     if output_file:
         # List to store data from all files
         data_list = []
 
-        # Loop through all files in the input folder
-        for file_name in os.listdir(input_folder):
-            if file_name.endswith('.xlsx'):
-                file_path = os.path.join(input_folder, file_name)
-                
+        # Loop through all selected files
+        for file_path in input_files:
+            if file_path.endswith('.xlsx'):
                 # Read the Adjustments sheet
                 df = pd.read_excel(file_path, sheet_name='Adjustments')
                 
@@ -62,4 +60,4 @@ if input_folder:
     else:
         print("Output file not selected.")
 else:
-    print("Input folder not selected.")
+    print("Input files not selected.")
